@@ -3,12 +3,13 @@ var app = express();
 const opn = require('opn');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 
-//serve static files from /public
-// app.use(express.static(__dirname + '/public')); 
-app.use(express.static('/public')); 
+app.set('view engine', 'ejs');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 
 mongoose.connect('mongodb://localhost:27017/authentication', { useNewUrlParser: true });
 
@@ -16,8 +17,24 @@ mongoose.connect('mongodb://localhost:27017/authentication', { useNewUrlParser: 
 const userRouter = require('./routes/userRouter.js');
 app.use('/user', userRouter);
 
+//Seems to be needed to host my static files on the server for the index.html to use
+app.use('/src', express.static(__dirname + '/src'));
+
 app.get('/', (req, res) => {
-    res.send({good: 'job'});
+    // res.send({good: 'job'});
+    // res.sendFile(path.join(__dirname + '/src/index.html'));
+    res.render('index.ejs')
+});
+
+app.get('/login', (req, res) => {
+    res.render('login.ejs')
+});
+
+app.get('/success', (req, res) => {
+    const email = req.query.email;
+    const index = email.indexOf('@');
+    const name = email.slice(0, index);
+    res.render('index2.ejs', {email: name});
 });
 
 //Catch 404 No Page Found and Forward to Error Handler
