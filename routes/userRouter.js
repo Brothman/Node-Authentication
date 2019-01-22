@@ -8,7 +8,7 @@ const User = require('../models/User');
 //     res.status(200).json({hello: 'Yo'})
 // });
 
-userRouter.post('/signup', (req, res) => {
+userRouter.post('/signup', (req, res) => { 
     console.log(req.body) // we get the email and username attributes
 
     bcrypt.hash(req.body.password, 10, (error, hash) => {
@@ -45,6 +45,7 @@ userRouter.post('/signin', (req, res) => {
     .then(user => {
         bcrypt.compare(req.body.password, user.password, (error, result) => {
             if (error) {
+                console.log('no user')
                 return res.status(401).json({
                     failed: 'Unauthorized Access'
                 });
@@ -53,10 +54,13 @@ userRouter.post('/signin', (req, res) => {
                 console.log(result)
                 return res.send({ email: user.email });
             }
+
+            return res.status(401).json({error: 'Invalid Username/Password Combination'});
+
             //wrong password
-            return res.status(401).json({
-                failed: 'Unauthorized Access'
-            });
+            // return res.status(401).json({
+            //     failed: 'Unauthorized Access'
+            // });
         });
     })
     .catch(error => {

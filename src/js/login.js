@@ -18,16 +18,22 @@
         }
 
         e.preventDefault();
-        $.ajax({
-            url: '/user/signin',
-            type: 'post',
-            data: $('.validate-form').serialize(),
-            success: function (values) {
-                //whatever you wanna do after the form is successfully submitted
-                console.log(values)
-                window.location = `/success?email=${values.email}`
-            }
-        });
+        if (check) {
+            $.ajax({
+                url: '/user/signin',
+                type: 'post',
+                data: $('.validate-form').serialize(),
+                success: function (values) {
+                    //whatever you wanna do after the form is successfully submitted
+                    console.log(values)
+                    window.location = `/success?email=${values.email}`
+                },
+                error: (values) => {
+                    const thisAlert = $(input[0]).parent();
+                    $(thisAlert).addClass('alert-invalid-email-password')                
+                }
+            });
+        }
 
         return check;
     });

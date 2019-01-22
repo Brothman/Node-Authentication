@@ -407,8 +407,7 @@ iframe {
   position: relative;
 }
 
-.alert-validate::before {
-  content: attr(data-validate);
+.alert-validate::before, .alert-invalid-email-password::before, .alert-existing-email::before {
   position: absolute;
   max-width: 70%;
   background-color: white;
@@ -439,7 +438,19 @@ iframe {
   transition: opacity 0.4s;
 }
 
-.alert-validate::after {
+.alert-validate::before {
+  content: attr(data-validate);
+}
+
+.alert-invalid-email-password::before {
+  content: attr(data-bad-email);
+}
+
+.alert-existing-email::before {
+  content: attr(data-existing-email);
+}
+
+.alert-validate::after, .alert-invalid-email-password::after, .alert-existing-email::after {
   content: "\f06a";
   font-family: FontAwesome;
   display: block;
@@ -455,7 +466,7 @@ iframe {
   right: 13px;
 }
 
-.alert-validate:hover:before {
+.alert-validate:hover:before, .alert-invalid-email-password:hover:before, .alert-existing-email:hover:before {
   visibility: visible;
   opacity: 1;
 }
